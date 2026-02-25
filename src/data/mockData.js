@@ -170,7 +170,7 @@ export const mockTickets = [
   },
 ];
 
-// Daily tickets data (resolved vs open per day) for line chart
+// Daily tickets data (resolved vs open per day) - used in Tickets page bar chart
 export const dailyTicketsData = [
   { date: "02/02", resolved: 2, open: 1, total: 3 },
   { date: "05/02", resolved: 1, open: 2, total: 3 },
@@ -182,27 +182,35 @@ export const dailyTicketsData = [
   { date: "20/02", resolved: 2, open: 1, total: 3 },
 ];
 
-// Technician performance data
+// Technician performance data (for dashboard charts)
 export const technicianPerformanceData = [
-  {
-    name: "Ahmed Benali",
-    ticketsResolved: 3,
-    avgResolutionTime: 3.5,
-    ticketsOpen: 0,
-  },
-  {
-    name: "Sara Mansouri",
-    ticketsResolved: 3,
-    avgResolutionTime: 2.2,
-    ticketsOpen: 1,
-  },
-  {
-    name: "Karim Zidane",
-    ticketsResolved: 0,
-    avgResolutionTime: 0,
-    ticketsOpen: 2,
-  },
+  { name: "Ahmed Benali", ticketsResolved: 3, avgResolutionTime: 3.5, ticketsOpen: 0 },
+  { name: "Sara Mansouri", ticketsResolved: 3, avgResolutionTime: 2.2, ticketsOpen: 1 },
+  { name: "Karim Zidane", ticketsResolved: 0, avgResolutionTime: 0, ticketsOpen: 2 },
 ];
+
+// Per-technician daily resolution time data (for Techniciens page line chart)
+export const technicianDailyData = {
+  "Ahmed Benali": [
+    { date: "02/02", resolutionTime: 4.0, tickets: 1 },
+    { date: "05/02", resolutionTime: 2.0, tickets: 1 },
+    { date: "15/02", resolutionTime: 5.0, tickets: 1 },
+    { date: "18/02", resolutionTime: 3.5, tickets: 1 },
+    { date: "20/02", resolutionTime: 2.5, tickets: 1 },
+  ],
+  "Sara Mansouri": [
+    { date: "03/02", resolutionTime: 1.5, tickets: 1 },
+    { date: "10/02", resolutionTime: 3.0, tickets: 1 },
+    { date: "12/02", resolutionTime: 1.5, tickets: 1 },
+    { date: "16/02", resolutionTime: 2.0, tickets: 1 },
+    { date: "20/02", resolutionTime: 4.0, tickets: 1 },
+  ],
+  "Karim Zidane": [
+    { date: "10/02", resolutionTime: 0, tickets: 0 },
+    { date: "15/02", resolutionTime: 0, tickets: 0 },
+    { date: "18/02", resolutionTime: 0, tickets: 0 },
+  ],
+};
 
 // KPI summary
 export const kpiData = {
@@ -213,3 +221,6 @@ export const kpiData = {
   avgResolutionTime: "3.2h",
   slaCompliance: "87%",
 };
+
+// All unique technicians list
+export const techniciansList = ["Ahmed Benali", "Sara Mansouri", "Karim Zidane"];

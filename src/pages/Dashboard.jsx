@@ -27,7 +27,6 @@ const priorityBadge = (p) => {
   };
   return map[p] || "bg-gray-50 text-gray-500";
 };
-
 const Dashboard = () => {
   return (
     <div className="flex min-h-screen bg-gray-50">
