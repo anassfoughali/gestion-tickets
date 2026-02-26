@@ -194,5 +194,4 @@ const Tickets = () => {
     </div>
   );
 };
-
 export default Tickets;
