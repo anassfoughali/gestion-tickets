@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Configuration de base pour l'API Spring Boot
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8080/api';
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8082/api';
 
 // Instance axios avec configuration par défaut
 const api = axios.create({
@@ -25,12 +25,10 @@ api.interceptors.request.use(
   }
 );
 
-// Intercepteur pour gérer les erreurs de réponse
-api.interceptors.response.use(
+api.interceptors.response.use (
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
-      // Token expiré ou invalide
+    if (error.response?.status === 401){
       localStorage.removeItem('token');
       localStorage.removeItem('role');
       window.location.href = '/login';
@@ -39,41 +37,48 @@ api.interceptors.response.use(
   }
 );
 
+
+// Dashnord - données temps réel pour les graphiques
+export const dashboardService = {
+  // Rest - snapshot
+  getStats: () => api.get('/dashboard/stats'),
+  //SSE -streaming
+  subscribeToStats:(onData, onError) => {
+    const eventSource = new EventSource(
+      `${API_BASE_URL}/dashboard/stats/stream`,
+    );
+    eventSource.addEventListener('dashboard', (e) =>{
+      try {
+        onData(JSON.parse(e.data));
+      }catch (err) {
+        console.error('Parse error', err);
+      }
+    });
+    eventSource.onerror = (e) => {
+      console.error('SSE erro' , e);
+      if (onError) onError(e);
+    };
+    //retourne pour fermer la connexion
+    return () => eventSource.close();
+  }
+}
+
+
 // Services d'authentification
 export const authService = {
-  login: (credentials) => api.post('/auth/login', credentials),
-  register: (userData) => api.post('/auth/register', userData),
-  logout: () => {
+  login:(credentials) => api.post('/auth/login', credentials),
+  logout:() => {
     localStorage.removeItem('token');
     localStorage.removeItem('role');
   },
 };
 
 // Services des tickets
-export const ticketService = {
-  getAllTickets: () => api.get('/tickets'),
-  getMyTickets: () => api.get('/tickets/my-tickets'),
-  getTicketById: (id) => api.get(`/tickets/${id}`),
-  createTicket: (ticketData) => api.post('/tickets', ticketData),
-  updateTicket: (id, ticketData) => api.put(`/tickets/${id}`, ticketData),
-  updateTicketStatus: (id, status) => api.patch(`/tickets/${id}/status`, { status }),
-  updateTicketPriority: (id, priority) => api.patch(`/tickets/${id}/priority`, { priority }),
-  deleteTicket: (id) => api.delete(`/tickets/${id}`),
-  addComment: (ticketId, comment) => api.post(`/tickets/${ticketId}/comments`, { comment }),
+export const ticketsService = {
+  getAll:        () => api.get('/tickets'),
+  getStatsParJour: () => api.get('/tickets/stats-par-jour'),
 };
 
-// Services des statistiques (Admin)
-export const statsService = {
-  getDashboardStats: () => api.get('/stats/dashboard'),
-  getTicketsByStatus: () => api.get('/stats/tickets-by-status'),
-  getTicketsByClient: () => api.get('/stats/tickets-by-client'),
-};
 
-// Services utilisateurs
-export const userService = {
-  getCurrentUser: () => api.get('/users/me'),
-  updateProfile: (userData) => api.put('/users/profile', userData),
-  getAllClients: () => api.get('/users/clients'),
-};
 
 export default api;
