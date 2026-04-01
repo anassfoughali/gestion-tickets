@@ -19,8 +19,8 @@ const statusBadge = (status) => {
   return "bg-gray-100 text-gray-600";
 };
 
-// ✅ Couleurs priorité : Critique=rouge, Majeure=orange, Mineure=vert
-// ✅ Mapping exact avec les vraies valeurs SAP HANA
+//  Couleurs priorité : Critique=rouge, Majeure=orange, Mineure=vert
+//  Mapping exact avec les vraies valeurs SAP HANA
 const priorityBadge = (p) => {
   if (!p) return "bg-gray-50 text-gray-500";
   const pr = p.toLowerCase().trim();
@@ -32,14 +32,14 @@ const priorityBadge = (p) => {
   return "bg-gray-50 text-gray-500 border border-gray-200";
 };
 
-// ✅ Helper — s'assure que c'est toujours un tableau
+//  Helper — s'assure que c'est toujours un tableau
 const toArray = (val) => {
   if (!val) return [];
   if (Array.isArray(val)) return val;
   return [];
 };
 
-// ✅ Helper — s'assure que c'est toujours une string
+//  Helper — s'assure que c'est toujours une string
 const toStr = (val) => {
   if (val === null || val === undefined) return 'N/A';
   if (typeof val === 'object') return JSON.stringify(val);
@@ -68,7 +68,7 @@ const Dashboard = () => {
     </div>
   );
 
-  // ✅ Extraction sécurisée
+  //  Extraction sécurisée
   const kpi             = stats?.kpi             || {};
   const parJour         = toArray(stats?.parJour);
   const parTechnicien   = toArray(stats?.parTechnicien);
@@ -143,7 +143,7 @@ const Dashboard = () => {
                   </thead>
                   <tbody className="divide-y divide-gray-50">
                     {ticketsRecents.map((t, idx) => (
-                      // ✅ idx comme fallback si issueID est undefined
+                      //  idx comme fallback si issueID est undefined
                       <tr key={t.issueID || idx} className="transition hover:bg-gray-50">
                         <td className="py-3 font-mono text-xs font-semibold text-indigo-600">{toStr(t.issueID)}</td>
                         <td className="max-w-xs py-3 text-gray-700 truncate">{toStr(t.briefDescription)}</td>

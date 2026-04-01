@@ -82,19 +82,19 @@ const Tickets = () => {
     return true;
   });
 
-  // ✅ Pagination
+  //  Pagination
   const totalPages   = Math.ceil(filteredTickets.length / ROWS_PER_PAGE);
   const startIndex   = (currentPage - 1) * ROWS_PER_PAGE;
   const endIndex     = startIndex + ROWS_PER_PAGE;
   const currentRows  = filteredTickets.slice(startIndex, endIndex);
 
-  // ✅ Reset page quand filtre change
+  //  Reset page quand filtre change
   const handleFilter = (f) => {
     setFilter(f);
     setCurrentPage(1);
   };
 
-  // ✅ Pages à afficher (max 5 boutons)
+  //  Pages à afficher (max 5 boutons)
   const getPageNumbers = () => {
     const pages = [];
     let start = Math.max(1, currentPage - 2);
@@ -256,7 +256,7 @@ const Tickets = () => {
               </table>
             </div>
 
-            {/* ✅ Pagination */}
+            {/*  Pagination */}
             {totalPages > 1 && (
               <div className="flex items-center justify-between pt-4 mt-4 border-t border-gray-100">
 
