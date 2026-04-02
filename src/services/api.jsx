@@ -60,4 +60,8 @@ export const technicienService = {
   getStats:         (groupId) => api.get(`/techniciens/${groupId}`),
 };
 
+export const rapportsService = {
+  getAll: () => api.get('/tickets'),
+};
+
 export default api;
