@@ -7,9 +7,10 @@ const api = axios.create({
   headers: { 'Content-Type': 'application/json' },
 });
 
+
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('jwt_token');
     if (token) config.headers.Authorization = `Bearer ${token}`;
     return config;
   },
@@ -20,8 +21,8 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      localStorage.removeItem('token');
-      localStorage.removeItem('role');
+      sessionStorage.removeItem('jwt_token');
+      sessionStorage.removeItem('user_info');
       window.location.href = '/login';
     }
     return Promise.reject(error);
@@ -31,7 +32,10 @@ api.interceptors.response.use(
 export const dashboardService = {
   getStats: () => api.get('/dashboard/stats'),
   subscribeToStats: (onData, onError) => {
-    const eventSource = new EventSource(`${API_BASE_URL}/dashboard/stats/stream`);
+    const token = sessionStorage.getItem('jwt_token');
+    const eventSource = new EventSource(
+      `${API_BASE_URL}/dashboard/stats/stream${token ? `?token=${token}` : ''}`
+    );
     eventSource.addEventListener('dashboard', (e) => {
       try { onData(JSON.parse(e.data)); } catch (err) { console.error('Parse error', err); }
     });
@@ -43,21 +47,20 @@ export const dashboardService = {
 export const authService = {
   login: (credentials) => api.post('/auth/login', credentials),
   logout: () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('role');
+    sessionStorage.removeItem('jwt_token');
+    sessionStorage.removeItem('user_info');
   },
 };
 
 export const ticketsService = {
-  getAll:          () => api.get('/tickets'),
+  getAll: () => api.get('/tickets'),
   getStatsParJour: () => api.get('/tickets/stats-par-jour'),
 };
 
-//  Techniciens
 export const technicienService = {
-  getAll:           () => api.get('/techniciens'),
+  getAll: () => api.get('/techniciens'),
   getStatsGlobales: () => api.get('/techniciens/stats-globales'),
-  getStats:         (groupId) => api.get(`/techniciens/${groupId}`),
+  getStats: (groupId) => api.get(`/techniciens/${groupId}`),
 };
 
 export const rapportsService = {

@@ -6,31 +6,8 @@ import TicketsPerDayChart from "../components/charts/TicketsPerDayChart";
 import TechnicianPerformanceChart from "../components/charts/TechnicianPerformanceChart";
 import ResolutionTimeChart from "../components/charts/ResolutionTimeChart";
 import useDashboard from "../hooks/useDashboard";
-import {
-  FiList, FiCheckCircle, FiClock, FiAlertCircle, FiTrendingUp, FiShield, FiRefreshCw,
-} from "react-icons/fi";
-
-const statusBadge = (status) => {
-  if (!status) return "bg-gray-100 text-gray-600";
-  const s = status.toLowerCase();
-  if (s.includes("resolu") || s.includes("clot")) return "bg-green-100 text-green-700";
-  if (s.includes("cours") || s.includes("progress")) return "bg-yellow-100 text-yellow-700";
-  if (s.includes("ouvert") || s.includes("open")) return "bg-red-100 text-red-700";
-  return "bg-gray-100 text-gray-600";
-};
-
-//  Couleurs priorité : Critique=rouge, Majeure=orange, Mineure=vert
-//  Mapping exact avec les vraies valeurs SAP HANA
-const priorityBadge = (p) => {
-  if (!p) return "bg-gray-50 text-gray-500";
-  const pr = p.toLowerCase().trim();
-
-  if (pr === "critique") return "bg-red-100 text-red-700 border border-red-200";
-  if (pr === "majeur")   return "bg-orange-100 text-orange-700 border border-orange-200";
-  if (pr === "mineur")   return "bg-green-100 text-green-700 border border-green-200";
-
-  return "bg-gray-50 text-gray-500 border border-gray-200";
-};
+import { FiList, FiCheckCircle, FiClock, FiAlertCircle, FiTrendingUp, FiShield, FiRefreshCw, FiLock } from "react-icons/fi";
+import { statusBadge, priorityBadge } from "../utils/statusHelpers";
 
 //  Helper — s'assure que c'est toujours un tableau
 const toArray = (val) => {
@@ -69,10 +46,10 @@ const Dashboard = () => {
   );
 
   //  Extraction sécurisée
-  const kpi             = stats?.kpi             || {};
-  const parJour         = toArray(stats?.parJour);
-  const parTechnicien   = toArray(stats?.parTechnicien);
-  const ticketsRecents  = toArray(stats?.ticketsRecents);
+  const kpi  = stats?.kpi|| {};
+  const parJour  = toArray(stats?.parJour);
+  const parTechnicien  = toArray(stats?.parTechnicien);
+  const ticketsRecents = toArray(stats?.ticketsRecents);
 
   return (
     <div className="flex min-h-screen bg-gray-50">
@@ -97,12 +74,13 @@ const Dashboard = () => {
 
           {/* KPI Cards */}
           <div className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-6">
-            <KpiCard title="Total Tickets" value={kpi.totalTickets}      subtitle="Total"         icon={<FiList />}        color="indigo" />
-            <KpiCard title="Ouverts"       value={kpi.openTickets}       subtitle="En attente"    icon={<FiAlertCircle />} color="red"    />
-            <KpiCard title="Résolus"       value={kpi.resolvedTickets}   subtitle="Clôturés"      icon={<FiCheckCircle />} color="green"  />
-            <KpiCard title="En Cours"      value={kpi.inProgressTickets} subtitle="En traitement" icon={<FiClock />}       color="yellow" />
-            <KpiCard title="Temps Moyen"   value={kpi.avgResolutionTime} subtitle="Résolution"    icon={<FiTrendingUp />}  color="blue"   />
-            <KpiCard title="SLA"           value={kpi.slaCompliance}     subtitle="Conformité"    icon={<FiShield />}      color="teal"   />
+            <KpiCard title="Total Tickets" value={kpi.totalTickets} subtitle="Total" icon={<FiList />} color="indigo" />
+            <KpiCard title="Ouverts" value={kpi.openTickets} subtitle="En attente" icon={<FiAlertCircle />} color="red" />
+            <KpiCard title="Résolus" value={kpi.resolvedTickets} subtitle="Clôturés" icon={<FiCheckCircle />} color="green"/>
+            <KpiCard title="Clôturés" value={kpi.cloturedTickets} subtitle="Clôturés" icon={<FiLock />} color="blue" />
+            <KpiCard title="En Cours" value={kpi.inProgressTickets} subtitle="En traitement" icon={<FiClock />} color="yellow"/>
+            <KpiCard title="Temps Moyen" value={kpi.avgResolutionTime} subtitle="Résolution" icon={<FiTrendingUp />} color="blue" />
+            <KpiCard title="SLA" value={kpi.slaCompliance} subtitle="Conformité" icon={<FiShield />} color="teal"/>
           </div>
 
           {/* Charts Row 1 */}

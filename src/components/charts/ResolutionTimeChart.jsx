@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import {
-  PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Sector,
+  PieChart, Pie, Cell, ResponsiveContainer,  Sector,
 } from "recharts";
 
 const COLORS = [
@@ -8,7 +8,7 @@ const COLORS = [
   "#06b6d4", "#f97316", "#84cc16", "#ec4899", "#14b8a6",
 ];
 
-// ✅ Slice active avec effet hover agrandi
+
 const renderActiveShape = (props) => {
   const {
     cx, cy, innerRadius, outerRadius, startAngle, endAngle,
@@ -17,7 +17,7 @@ const renderActiveShape = (props) => {
 
   return (
     <g>
-      {/* ✅ Nom du technicien au centre au hover */}
+      {/*  Nom du technicien au centre au hover */}
       <text x={cx} y={cy - 10} textAnchor="middle" fill="#1f2937" fontSize={11} fontWeight="600">
         {payload.name.length > 14 ? payload.name.slice(0, 14) + "…" : payload.name}
       </text>
@@ -55,7 +55,7 @@ const ResolutionTimeChart = ({ data }) => {
     </div>
   );
 
-  // ✅ TOP 5 seulement — évite le surcharge visuelle
+  //  TOP 5 seulement — évite le surcharge visuelle
   const chartData = data
     .map((t) => ({
       name: t.name || t.technicien || "N/A",
@@ -93,7 +93,7 @@ const ResolutionTimeChart = ({ data }) => {
         </PieChart>
       </ResponsiveContainer>
 
-      {/* ✅ Légende custom en bas — propre et lisible */}
+      {/*  Légende custom en bas — propre et lisible */}
       <div className="flex flex-wrap justify-center mt-2 gap-x-3 gap-y-1">
         {chartData.map((entry, index) => (
           <div
